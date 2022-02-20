@@ -6,25 +6,23 @@ def fast_power(a,k,m):
         if(k%2==1):
             ans*=a%m
         a*=a%m
-        k=int(k/2)
+        k=k//2
     return ans%m
 
 def primality_test(n):
-    #Miller-Rabin primality test
+    'Miller-Rabin primality test'
     if n==2:
         return True
     q=n-1
     k=0
     while q%2==0:
         k+=1
-        q/=2
-    q=int(q)
-    for a in range(1,n):
+        q=q//2
+    for a in range(1,n//4):
         if n%a==0:
             continue
         b=False
         for i in range(k):
-            print(fast_power(a,fast_power(2,i,n)*q,n))
             if fast_power(a,fast_power(2,i,n)*q,n)==n-1:
                 b=True
                 break
