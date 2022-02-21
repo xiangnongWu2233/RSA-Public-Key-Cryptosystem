@@ -1,14 +1,10 @@
 import random
-map={}
-for i in range(26):
-    map.update({chr(i+65):str(i+11)})
-    map.update({str(i+11):chr(i+65)})
-for i in range(26):
-    map.update({chr(i+97):str(i+37)})
-    map.update({str(i+37):chr(i+97)})
-map.update({' ':'70'})
-map.update({'70':' '})
+from Text_Code import map
 
+def exgcd(m,n):
+    if n==0 :
+        return m
+    return exgcd(n,m%n)
 
 def fast_power(a,k,m):
     ans=1
@@ -49,24 +45,28 @@ def generate_key():
         q = random.randint(10 ** 6, 10 ** 7)
     m=p*q
     euler_m=(p-1)*(q-1)
-    k=random.randint(10**6,10**7)
-    while(euler_m%k==0):
-        k=random.randint(10**6,10**7)
-    save=open("rule.txt","w")
-    save.write(str(m)+"\n"+str(k))
-    return (p,q)
+    k=random.randint(10**4,10**5)
+    while(exgcd(k,euler_m)!=1):
+        k = random.randint(10 ** 4, 10 ** 5)
+    rule=open("rule.txt","w")
+    key=open("key.txt","w")
+    rule.write(str(m)+"\n"+str(k))
+    key.write(str(p)+"\n"+str(q))
 
 def encoding(message,k,m):
-    number=''
-    for i in message:
-        number+=map[i]
     code=[]
-    for i in range(0,len(number),4):
-        if (i+4)<=len(number):
-            code.append(number[i:(i+4)])
+    for i in range(0,len(message),4):
+        if (i+4)<=len(message):
+            code.append(message[i:(i+4)])
         else:
-            code.append(number[i:len(number)])
+            code.append(message[i:len(message)])
     for i in range(len(code)):
         j=int(code[i])
         code[i]=fast_power(j,k,m)
+    return code
+
+def toCode(message):
+    code = ''
+    for i in message:
+        code += map[i]
     return code
