@@ -1,11 +1,14 @@
 import random
-
 map={}
 for i in range(26):
-    map.update({chr(i+65):str(i+1)})
+    map.update({chr(i+65):str(i+11)})
+    map.update({str(i+11):chr(i+65)})
 for i in range(26):
-    map.update({chr(i+97):str(i+27)})
-map.update({' ':'50'})
+    map.update({chr(i+97):str(i+37)})
+    map.update({str(i+37):chr(i+97)})
+map.update({' ':'70'})
+map.update({'70':' '})
+
 
 def fast_power(a,k,m):
     ans=1
@@ -38,12 +41,12 @@ def primality_test(n):
     return True
 
 def generate_key():
-    p=random.randint(10**10,10**11)
+    p=random.randint(10**6,10**7)
     while primality_test(p)==False:
-        p = random.randint(10 ** 10, 10 ** 11)
-    q=random.randint(10**10,10**11)
+        p = random.randint(10 ** 6, 10 ** 7)
+    q=random.randint(10**6,10**7)
     while primality_test(q)==False:
-        q = random.randint(10 ** 10, 10 ** 11)
+        q = random.randint(10 ** 6, 10 ** 7)
     m=p*q
     euler_m=(p-1)*(q-1)
     k=random.randint(10**6,10**7)
@@ -51,27 +54,19 @@ def generate_key():
         k=random.randint(10**6,10**7)
     save=open("rule.txt","w")
     save.write(str(m)+"\n"+str(k))
+    return (p,q)
 
 def encoding(message,k,m):
-    information=message.upper()
     number=''
-    for i in information:
+    for i in message:
         number+=map[i]
     code=[]
-    for i in range(0,len(number),6):
-        if (i+6)<=len(number):
-            code.append(number[i:(i+6)])
+    for i in range(0,len(number),4):
+        if (i+4)<=len(number):
+            code.append(number[i:(i+4)])
         else:
             code.append(number[i:len(number)])
     for i in range(len(code)):
         j=int(code[i])
         code[i]=fast_power(j,k,m)
     return code
-
-generate_key()
-infile=open("rule.txt","r")
-sm=infile.readline()
-sk=infile.readline()
-m=int(sm)
-k=int(sk)
-print(encoding("Good Morning",k,m))
