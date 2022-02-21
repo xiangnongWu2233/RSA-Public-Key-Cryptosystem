@@ -1,9 +1,16 @@
 import random
 
+map={}
+for i in range(26):
+    map.update({chr(i+65):str(i+1)})
+for i in range(26):
+    map.update({chr(i+97):str(i+27)})
+map.update({' ':'50'})
+
 def fast_power(a,k,m):
     ans=1
-    while(k):
-        if(k%2==1):
+    while k :
+        if k%2==1 :
             ans*=a%m
         a*=a%m
         k=k//2
@@ -18,7 +25,7 @@ def primality_test(n):
     while q%2==0:
         k+=1
         q=q//2
-    for a in range(1,n//4):
+    for a in range(1,100):
         if n%a==0:
             continue
         b=False
@@ -31,13 +38,17 @@ def primality_test(n):
     return True
 
 def generate_key():
-    p=random.randint(10**200,10**201)
-    q=random.randint(10**200,10**201)
+    p=random.randint(10**10,10**11)
+    while primality_test(p)==False:
+        p = random.randint(10 ** 10, 10 ** 11)
+    q=random.randint(10**10,10**11)
+    while primality_test(q)==False:
+        q = random.randint(10 ** 10, 10 ** 11)
     m=p*q
     euler_m=(p-1)*(q-1)
-    k=random.randint(10**10,10**11)
+    k=random.randint(10**6,10**7)
     while(euler_m%k==0):
-        k=random.randint(10**10,10**11)
+        k=random.randint(10**6,10**7)
     save=open("rule.txt","w")
     save.write(str(m)+"\n"+str(k))
 
@@ -45,11 +56,11 @@ def encoding(message,k,m):
     information=message.upper()
     number=''
     for i in information:
-        number+=str(ord(i))
+        number+=map[i]
     code=[]
-    for i in range(0,len(number),8):
-        if (i+8)<=len(number):
-            code.append(number[i:(i+8)])
+    for i in range(0,len(number),6):
+        if (i+6)<=len(number):
+            code.append(number[i:(i+6)])
         else:
             code.append(number[i:len(number)])
     for i in range(len(code)):
@@ -57,11 +68,10 @@ def encoding(message,k,m):
         code[i]=fast_power(j,k,m)
     return code
 
-'''generate_key()
+generate_key()
 infile=open("rule.txt","r")
 sm=infile.readline()
 sk=infile.readline()
 m=int(sm)
 k=int(sk)
-'''
-print(primality_test(155196355420821961))
+print(encoding("Good Morning",k,m))
