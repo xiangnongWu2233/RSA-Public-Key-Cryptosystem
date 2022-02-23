@@ -1,4 +1,5 @@
 import random
+import os
 from Text_Code import map
 
 def exgcd(m,n):
@@ -36,28 +37,36 @@ def primality_test(n):
             return False
     return True
 
-def generate_key():
-    p=random.randint(10**6,10**7)
+def generate_key(range):
+    p=random.randint(10**range,10**(range+1))
     while primality_test(p)==False:
-        p = random.randint(10 ** 6, 10 ** 7)
-    q=random.randint(10**6,10**7)
+        p = random.randint(10 ** range, 10 ** (range+1))
+    q=random.randint(10**range,10**(range+1))
     while primality_test(q)==False:
-        q = random.randint(10 ** 6, 10 ** 7)
+        q = random.randint(10 ** range, 10 ** (range+1))
     m=p*q
     euler_m=(p-1)*(q-1)
-    k=random.randint(10**4,10**5)
+    k=random.randint(10**range,10**(range+1))
     while(exgcd(k,euler_m)!=1):
-        k = random.randint(10 ** 4, 10 ** 5)
-    rule=open("rule.txt","w")
-    key=open("key.txt","w")
+        k = random.randint(10 ** range, 10 ** (range+1))
+
+
+    if os.path.exists('Table')==False:
+        os.mkdir('Table')
+    path_rule=os.path.join('Table','rule.txt');
+    path_key=os.path.join('Table','key.txt');
+    rule=open(path_rule,"w")
+    key=open(path_key,"w")
     rule.write(str(m)+"\n"+str(k))
     key.write(str(p)+"\n"+str(q))
+    rule.close()
+    key.close()
 
 def encoding(message,k,m):
     code=[]
-    for i in range(0,len(message),4):
-        if (i+4)<=len(message):
-            code.append(message[i:(i+4)])
+    for i in range(0,len(message),8):
+        if (i+8)<=len(message):
+            code.append(message[i:(i+8)])
         else:
             code.append(message[i:len(message)])
     for i in range(len(code)):
