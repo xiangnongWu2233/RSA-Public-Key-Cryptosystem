@@ -62,7 +62,8 @@ def generate_key(range):
     rule.close()
     key.close()
 
-def encoding(message,k,m):
+def encoding(message,m,k):
+    message=toCode(message)
     code=[]
     for i in range(0,len(message),8):
         if (i+8)<=len(message):
