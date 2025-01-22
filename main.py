@@ -1,3 +1,4 @@
+import pygame
 import os
 from encoder import generate_key,encoding
 from decoder import decoding
@@ -55,7 +56,7 @@ class Tester:
     def __init__(self):
         self.root=Tk()
         self.root.title('Test')
-        self.message="Hello World"
+        self.message="This is an implementation of the RSA public key cryptosystem"
         self.Button1=Button(self.root,text='Generate Key',command=self.key)
         self.Button2=Button(self.root,text="Encode",command=self.encode)
         self.Button3=Button(self.root,text="Decode",command=self.decode)
@@ -69,6 +70,7 @@ class Tester:
 
     def key(self):
         generate_key(10)
+
     def encode(self):
         self.code=encoding(self.message,self.m,self.k)
 
